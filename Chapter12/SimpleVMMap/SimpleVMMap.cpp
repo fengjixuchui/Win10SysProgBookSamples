@@ -93,7 +93,7 @@ std::string GetDetails(HANDLE hProcess, MEMORY_BASIC_INFORMATION& mbi) {
 void DisplayBlock(HANDLE hProcess, MEMORY_BASIC_INFORMATION& mbi) {
 	printf("%s", mbi.AllocationBase == mbi.BaseAddress ? "*" : " ");
 	printf("0x%16p", mbi.BaseAddress);
-	printf(" %11llu KB", mbi.RegionSize >> 10);
+	printf(" %11zu KB", mbi.RegionSize >> 10);
 	printf(" %-10s", StateToString(mbi.State));
 	printf(" %-17s", mbi.State != MEM_COMMIT ? "" : ProtectionToString(mbi.Protect).c_str());
 	printf(" %-17s", mbi.State == MEM_FREE ? "" : ProtectionToString(mbi.AllocationProtect).c_str());
@@ -128,7 +128,7 @@ int main(int argc, const char* argv[]) {
 	}
 
 	// open process
-	HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pid);
+	HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
 	if (!hProcess)
 		return Error("Failed to open process");
 
